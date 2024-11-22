@@ -38,7 +38,8 @@ While the new structural pattern matching provides powerful features not afforde
 they also lack the simplicity of boring old enums with switch cases. 
 And most importantly, lack the enum part.
 
-> [!NOTE] TLDR; Yes I do know about structural pattern matching in python. 
+> [!NOTE]
+> TLDR; Yes I do know about structural pattern matching in python. 
 > It still however, does not let you create enums. This addresses the enum part of the equation.
 
 It is vary common to want to group options into some sort of structure.
