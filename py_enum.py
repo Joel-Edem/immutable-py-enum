@@ -47,7 +47,6 @@ class Enum(tuple):
     def __getitem__(self, index):
         if isinstance(index, str):
             return self.index(index)
-
         return super().__getitem__(index)
 
 

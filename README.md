@@ -234,9 +234,3 @@ COLOR(1)='BLUE'
 COLOR["RED"]=0
 COLOR[0]='RED'
 ```
-
-
-
-
-
-
