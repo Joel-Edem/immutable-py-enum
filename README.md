@@ -5,9 +5,9 @@ A cursed implementation of enums in python.
 ```python
 import Enum
 
-COLOR = Enum("RED", "BLUE", "GREEN")
+COLOR = Enum("RED", "BLUE", "GREEN", PINK=99)
 
-colors = [COLOR.RED, COLOR.BLUE, COLOR.GREEN]
+colors = [COLOR.RED, COLOR.BLUE, COLOR.GREEN, COLOR.PINK]
 for color in colors:
     match color:
         case COLOR.RED:
@@ -25,7 +25,6 @@ for color in colors:
 Matched RED color
 Matched BLUE color
 Sorry, couldn't match GREEN
-
 ```
 
 
@@ -33,41 +32,37 @@ Sorry, couldn't match GREEN
 With enums you can easily use the `.` or `[]` operator like classes or dicts, 
 with the benefit of immutability and much faster lookups.
 
+### Creating
 ```python
-COLOR = Enum("RED", "BLUE", "GREEN")
+COLOR =  Enum("RED", "BLUE", "GREEN")
+SHAPES = Enum(SQUARE=5, RECTANGLE=6, CIRCLE=9)
+FRUITS = Enum("ORANGE", "BANANA", MANGO=2, LEMON=0)
 
-# using the .
-blue = COLOR.BLUE  # get val
-
-# using a string
-blue_2 = COLOR['BLUE']
 
 ```
 
-## Example USAGE 
-
+### READING LABELS
 ```python
+# by calling        PRINTS
+print(FRUITS(2))   #   'MANGO'
+print(SHAPES(9))   #   'CIRCLE'
 
-    print(f"{COLOR}\n")  # print enum
-    #
-    print(f"{COLOR.BLUE=}")  # get val
-    #
-    print(f"{COLOR(1)=}")  # get "enum label"
-    #
-    print(f'{COLOR["RED"]=}')  # get value
-    #
-    print(f"{COLOR[0]=}")  # get label
+# by index
+print(FRUITS[0])    #  'LEMON'
+print(SHAPES[9])    #   'CIRCLE'
+```
+### READING VALUES
+```python
+# BY INDEX
+print(SHAPES['SQUARE'])  # 5
+print(FRUITS['MANGO'])   # 2
+# BY CALLING
+print( FRUITS('MANGO'))  # 2    
+print( FRUITS('LEMON'))  # 0
+# BY ATTRIBUTE
+print(FRUITS.BANANA)     # 4
+print(COLOR.BLUE)        # 1
+
 ```
 
-Output:
-```shell
-Enum:
- RED      0  
- BLUE     1  
- GREEN    2  
 
-COLOR.BLUE=1
-COLOR(1)='BLUE'
-COLOR["RED"]=0
-COLOR[0]='RED'
-```
