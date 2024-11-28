@@ -14,67 +14,28 @@
 #   as being the original software.
 #
 #   3. This notice may not be removed or altered from any source distribution.
+from collections import namedtuple
 
-class Enum(tuple):
+
+def simple_enum(*args, **kwargs):
+    _keys = [*args, *kwargs.keys()]
+    assert len(set(_keys)) == len(_keys), "Duplicate Enum keys found"
+    for k in _keys:
+        assert isinstance(k, str), "Enum keys must be strings"
+    _t = namedtuple("Enum", _keys)
+    _v = []
+
+    idx = max(kwargs.values()) + 1 if kwargs else 0
+    for i in range(len(args)):
+        _v.append(idx)
+        idx += 1
+    for kw in kwargs:
+        _v.append(kwargs[kw])
+    return _t(*_v)
+
+
+class Enum:
     def __new__(cls, *args, **kwargs):
-        if not args and not kwargs:
-            raise Exception("Enum must have at least one key")
-
-        if args and isinstance(args[0], tuple):
-            args = args[0]
-
-        keys = list(args)
-        values = []
-        if args:
-            for v in args:
-                if not isinstance(v, str):
-                    raise Exception("Enum keys must be strings")
-            if len(set(args)) != len(args):
-                raise Exception("Duplicate Enum keys found")
-
-            idx = max(kwargs.values()) + 1 if kwargs else 0
-            for i in range(len(args)):
-                values.append(idx)
-                idx += 1
-
-        if kwargs:
-            for k, v in kwargs.items():
-                keys.append(k)
-                values.append(v)
-
-        keys = tuple(keys)
-        values = tuple(values)
-
-        inst = super().__new__(cls, keys)
-        inst._vals = values
-        for idx, key in enumerate(inst):
-            setattr(inst, str(key), inst._vals[idx])
-        assert len(keys) == len(values)
+        inst = simple_enum(*args, **kwargs)
         return inst
 
-    def __call__(self, opt: int | str):
-        try:
-            if isinstance(opt, str):
-                return self._vals[self.index(opt)]
-            elif isinstance(opt, int):
-                return super().__getitem__(self._vals.index(opt))
-        except ValueError:
-            raise ValueError("Enum.index(x): x not in enum")
-        except Exception as e:
-            raise e
-
-    def __getitem__(self, opt: int | str):
-        try:
-            if isinstance(opt, str):
-                return self._vals[self.index(opt)]
-            else:
-                return super().__getitem__(self._vals.index(opt))
-        except ValueError:
-            raise ValueError("Enum.index(x): x not in enum")
-        except Exception as e:
-            raise e
-
-    def __repr__(self):
-        m = len(max(self) * 2)
-        return 'Enum:\n %s' % '\n '.join('{'f"{i}" f'[0]:<{m}}} ' ' {'f"{i}"'[1]}' for i in range(len(self))).format(
-            *zip(self, self._vals))
